@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const serverless = require('serverless-http');
 const app = express();
 const PORT = 3000;
+
 app.use(express.json());
 const corsOptions = {
     origin: "*",
@@ -18,6 +19,18 @@ app.post('/new-question', async(req, res) =>{
         console.log(error.message);
         res.status(500).json({message: error.message})
     }
+})
+app.put('/update-question/:_id', async(req, res) =>{
+  try {
+    var {_id} = {'_id':req.params};
+    console.log(_id);
+      const question = await Question.findOneAndUpdate(_id, req.body,{upsert: true});
+      res.status(200).json(question)
+      
+  } catch (error) {
+      console.log(error.message);
+      res.status(500).json({message: error.message})
+  }
 })
 app.post('/punch/:APIKEY/:ClientSecretKey/:EE/:Time/:type/:job', async(req, res) =>{
   const {APIKEY} = req.params;
@@ -235,7 +248,15 @@ app.get('/payroll', async(req, res) => {
     const payroll = await Question.find({category: 'Payroll'});
     res.status(200).json(payroll);
   });
-  app.get('/Payroll-Forms & Notices', async(req, res) => {
+  app.get('/slacky/:message', async(req, res) => {
+    let {message} = req.params;
+    message = message.toLocaleLowerCase();
+    console.log(message)
+        let part = await Question.find({tags: {$regex: `${message}`, $options: 'i'}})
+        res.status(200).json(part);
+    
+  });
+  app.get('/Payroll-Forms-and-Notices', async(req, res) => {
     const payroll = await Question.find({category: 'Payroll - Forms & Notices'});
     res.status(200).json(payroll);
   });
@@ -289,6 +310,10 @@ app.get('/payroll', async(req, res) => {
   });
   app.get('/Home', async(req, res) => {
     const payroll = await Question.find().sort({$natural: -1}).limit(5);
+    res.status(200).json(payroll);
+  });
+  app.get('/All', async(req, res) => {
+    const payroll = await Question.find().sort({$natural: -1});
     res.status(200).json(payroll);
   });
 
