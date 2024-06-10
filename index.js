@@ -346,7 +346,7 @@ const questionschema = mongoose.Schema(
         },
         links:{
           type: Array,
-          default : ['item1']
+          default : []
         }
     }
 )

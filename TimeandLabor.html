@@ -108,8 +108,8 @@ animation: spin 2s linear infinite;
         app.controller('myCtrl', function($scope, $http) {
             $scope.loading = true;
             let test = 'deductions'
-        // $http.get("https://wmzeeupjd57owgpb2hjeciiq5e0huipa.lambda-url.us-east-2.on.aws/slacky/client has")
-        $http.get(`http://localhost:3000/slacky/${test}`)
+        $http.get("https://wmzeeupjd57owgpb2hjeciiq5e0huipa.lambda-url.us-east-2.on.aws/Time-Labor")
+        // $http.get(`http://localhost:3000/slacky/${test}`)
         .then(function(response) {
             $scope.loading = false;
             $scope.Question = response.data;
